@@ -1,14 +1,11 @@
-// ============================================================
-//  沖繩旅遊攻略 - 主要互動邏輯 (v2)
+﻿// ============================================================
+//  瘝鼎???餌 - 銝餉?鈭??摩 (v2)
 // ============================================================
 
 (function () {
   'use strict';
 
-  // ── State ──────────────────────────────────────────────────
-  let HOTELS = [];
-  const getItem = (id) => ATTRACTIONS.find(a => a.id === id) || HOTELS.find(h => h.id === id);
-
+  // ?? State ??????????????????????????????????????????????????
   let activeAttractionId = null;
   let activeFilter       = 'all';
   let numDays            = 3;
@@ -19,7 +16,7 @@
   // itinerary[dayIndex] = [ attractionId, ... ]
   let itinerary = [];
 
-  // ── DOM Refs ────────────────────────────────────────────────
+  // ?? DOM Refs ????????????????????????????????????????????????
   const attractionsGrid   = document.getElementById('attractions-grid');
   const filterCount       = document.getElementById('filter-count');
   const detailSection     = document.getElementById('detail-section');
@@ -54,11 +51,10 @@
   const summaryTotal      = document.getElementById('summary-total');
   const summaryTime       = document.getElementById('summary-time');
 
-  // ── Init ────────────────────────────────────────────────────
+  // ?? Init ????????????????????????????????????????????????????
   function init() {
     initItinerary();
     buildAttractionCards();
-    initHotels();
     bindMapMarkers();
     bindFilterButtons();
     bindMapOverviewRegions();
@@ -70,46 +66,16 @@
     updateSummary();
   }
 
-  // ── Init Hotels ─────────────────────────────────────────────
-  function initHotels() {
-    document.querySelectorAll('.hotel-card').forEach(card => {
-      const h = {
-        id: card.dataset.hotelId,
-        name: card.dataset.hotelName,
-        nameJp: '',
-        emoji: card.dataset.hotelEmoji,
-        regionLabel: card.dataset.hotelRegion,
-        ticket: card.dataset.hotelPrice + ' / ' + card.dataset.hotelStars,
-        timeHours: 0, // Hotels do not add sightseeing time
-        isHotel: true
-      };
-      if(h.id) HOTELS.push(h);
-
-      // Create "Add to itinerary" button for hotel
-      const btn = document.createElement('button');
-      btn.className = 'card-btn-add hotel-add-btn';
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>加入行程`;
-      
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openDayPicker(h.id);
-      });
-
-      const row = card.querySelector('.hotel-info-row');
-      if (row) row.appendChild(btn);
-    });
-  }
-
-  // ── Itinerary init ──────────────────────────────────────────
+  // ?? Itinerary init ??????????????????????????????????????????
   function initItinerary() {
     itinerary = Array.from({ length: MAX_DAYS }, () => []);
   }
 
-  // ── Build cards ─────────────────────────────────────────────
+  // ?? Build cards ?????????????????????????????????????????????
   function buildAttractionCards() {
     attractionsGrid.innerHTML = '';
     const regionColors = { north: '#3b82f6', central: '#10b981', south: '#ef4444' };
-    const regionNames  = { north: '北部', central: '中部', south: '南部・那霸' };
+    const regionNames  = { north: '?', central: '銝剝', south: '??駁?? };
 
     ATTRACTIONS.forEach(attr => {
       const card = document.createElement('div');
@@ -123,7 +89,7 @@
         <div class="card-image-wrap">
           <img class="card-image" src="${attr.image}" alt="${attr.name}" loading="lazy"/>
           <div class="card-region-tag" style="background:${regionColors[attr.region]}">${regionNames[attr.region]}</div>
-          <div class="card-rating-tag">⭐ ${attr.rating}</div>
+          <div class="card-rating-tag">潃?${attr.rating}</div>
         </div>
         <div class="card-body">
           <div class="card-category">${attr.category}</div>
@@ -132,13 +98,13 @@
           <p class="card-desc">${attr.desc}</p>
           <div class="card-tags">${attr.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
           <div class="card-actions">
-            <button class="card-btn-detail" data-id="${attr.id}" aria-label="查看${attr.name}詳細資訊">
+            <button class="card-btn-detail" data-id="${attr.id}" aria-label="?亦?${attr.name}閰喟敦鞈?">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-              查看詳細資訊
+              ?亦?閰喟敦鞈?
             </button>
-            <button class="card-btn-add" data-id="${attr.id}" aria-label="將${attr.name}加入行程">
+            <button class="card-btn-add" data-id="${attr.id}" aria-label="撠?{attr.name}?銵?">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              加入行程
+              ?銵?
             </button>
           </div>
         </div>
@@ -148,13 +114,13 @@
       const img = card.querySelector('.card-image');
       img.onerror = function () { this.src = attr.fallback; this.onerror = null; };
 
-      // ── DETAIL button (the fix: directly on the button, not the card) ──
+      // ?? DETAIL button (the fix: directly on the button, not the card) ??
       card.querySelector('.card-btn-detail').addEventListener('click', function (e) {
         e.stopPropagation();
         showDetail(attr.id);
       });
 
-      // ── ADD TO ITINERARY button ──
+      // ?? ADD TO ITINERARY button ??
       card.querySelector('.card-btn-add').addEventListener('click', function (e) {
         e.stopPropagation();
         showDetail(attr.id);      // also open detail so user sees context
@@ -167,9 +133,8 @@
     updateFilterCount();
   }
 
-  // ── Show detail (slides in BELOW the attractions grid) ──────
+  // ?? Show detail (slides in BELOW the attractions grid) ??????
   function showDetail(id) {
-    // Only show detail for attractions (not hotels)
     const attr = ATTRACTIONS.find(a => a.id === id);
     if (!attr) return;
 
@@ -178,21 +143,21 @@
     activeAttractionId = id;
 
     // Populate
-    detailImage.src = attr.image || '';
+    detailImage.src = attr.image;
     detailImage.alt = attr.name;
-    detailImage.onerror = function () { this.src = attr.fallback || ''; this.onerror = null; };
-    detailRegionBadge.textContent = attr.regionLabel  || '';
-    detailRating.textContent      = attr.rating ? `⭐ ${attr.rating}` : '';
-    detailCategory.textContent    = attr.category     || '';
-    detailName.textContent        = attr.name         || '';
-    detailNameJp.textContent      = attr.nameJp       || '';
-    detailDesc.textContent        = attr.desc         || '';
-    infoTimeVal.textContent       = attr.timeNeeded   || '';
-    infoTicketVal.textContent     = attr.ticket       || '';
-    infoHoursVal.textContent      = attr.hours        || '';
-    infoAccessVal.textContent     = attr.access       || '';
-    detailTags.innerHTML          = (attr.tags  || []).map(t => `<span class="tag">${t}</span>`).join('');
-    detailTipsList.innerHTML      = (attr.tips  || []).map(t => `<li>${t}</li>`).join('');
+    detailImage.onerror = function () { this.src = attr.fallback; this.onerror = null; };
+    detailRegionBadge.textContent = attr.regionLabel;
+    detailRating.textContent      = `潃?${attr.rating}`;
+    detailCategory.textContent    = attr.category;
+    detailName.textContent        = attr.name;
+    detailNameJp.textContent      = attr.nameJp;
+    detailDesc.textContent        = attr.desc;
+    infoTimeVal.textContent       = attr.timeNeeded;
+    infoTicketVal.textContent     = attr.ticket;
+    infoHoursVal.textContent      = attr.hours;
+    infoAccessVal.textContent     = attr.access;
+    detailTags.innerHTML          = attr.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    detailTipsList.innerHTML      = attr.tips.map(t => `<li>${t}</li>`).join('');
 
     // Show section
     detailSection.style.display = 'block';
@@ -212,7 +177,7 @@
     updateMarkerStates(id);
   }
 
-  // ── Close detail panel ──────────────────────────────────────
+  // ?? Close detail panel ??????????????????????????????????????
   function closeDetail() {
     detailSection.style.display = 'none';
     activeAttractionId = null;
@@ -221,14 +186,14 @@
     document.querySelectorAll('.marker-group').forEach(m => m.classList.remove('active-marker', 'dimmed'));
   }
 
-  // ── Update active card highlight ────────────────────────────
+  // ?? Update active card highlight ????????????????????????????
   function updateActiveCard(id) {
     document.querySelectorAll('.attraction-card').forEach(c => {
       c.classList.toggle('is-active', c.dataset.id === id);
     });
   }
 
-  // ── Update map marker states ─────────────────────────────────
+  // ?? Update map marker states ?????????????????????????????????
   function updateMarkerStates(activeId) {
     document.querySelectorAll('.marker-group').forEach(m => {
       m.classList.remove('active-marker', 'dimmed');
@@ -240,7 +205,7 @@
     });
   }
 
-  // ── Bind map markers ────────────────────────────────────────
+  // ?? Bind map markers ????????????????????????????????????????
   function bindMapMarkers() {
     document.querySelectorAll('.marker-group').forEach(marker => {
       const id = marker.dataset.id;
@@ -257,7 +222,7 @@
     });
   }
 
-  // ── Bind map overview region cards ──────────────────────────
+  // ?? Bind map overview region cards ??????????????????????????
   function bindMapOverviewRegions() {
     ['north', 'central', 'south'].forEach(region => {
       const el = document.getElementById(`ov-${region}`);
@@ -276,7 +241,7 @@
     });
   }
 
-  // ── Bind filter buttons ──────────────────────────────────────
+  // ?? Bind filter buttons ??????????????????????????????????????
   function bindFilterButtons() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -287,7 +252,7 @@
         filterMapMarkers(activeFilter);
         // If active detail is not in this filter, close it
         if (activeAttractionId) {
-          const a = getItem(activeAttractionId);
+          const a = ATTRACTIONS.find(x => x.id === activeAttractionId);
           if (activeFilter !== 'all' && a?.region !== activeFilter) closeDetail();
         }
       });
@@ -302,8 +267,8 @@
       if (show) count++;
     });
     if (filterCount) {
-      const label = filter === 'all' ? '全部' : { north: '北部', central: '中部', south: '南部' }[filter];
-      filterCount.textContent = `顯示 ${count} 個${label}景點`;
+      const label = filter === 'all' ? '?券' : { north: '?', central: '銝剝', south: '?' }[filter];
+      filterCount.textContent = `憿舐內 ${count} ??{label}?舫?`;
     }
   }
 
@@ -318,10 +283,10 @@
   }
 
   function updateFilterCount() {
-    if (filterCount) filterCount.textContent = `顯示 ${ATTRACTIONS.length} 個景點`;
+    if (filterCount) filterCount.textContent = `憿舐內 ${ATTRACTIONS.length} ?暺;
   }
 
-  // ── Detail panel controls ────────────────────────────────────
+  // ?? Detail panel controls ????????????????????????????????????
   function bindDetailPanel() {
     detailCloseBtn.addEventListener('click', closeDetail);
     detailAddBtn.addEventListener('click', () => {
@@ -340,7 +305,7 @@
     }, true);
   }
 
-  // ── Day picker ───────────────────────────────────────────────
+  // ?? Day picker ???????????????????????????????????????????????
   function openDayPicker(attractionId) {
     if (!attractionId) return;
     dayPickerDays.innerHTML = '';
@@ -349,7 +314,7 @@
       const isAdded = itinerary[d].includes(attractionId);
       const btn = document.createElement('button');
       btn.className = 'day-picker-btn' + (isFull && !isAdded ? ' day-full' : '');
-      btn.textContent = isAdded ? `✓ 第 ${d+1} 天` : `第 ${d+1} 天`;
+      btn.textContent = isAdded ? `??蝚?${d+1} 憭奈 : `蝚?${d+1} 憭奈;
       btn.style.background = isAdded ? 'rgba(21,128,61,0.15)' : '';
       btn.style.color = isAdded ? '#15803d' : '';
       if (!isFull || isAdded) {
@@ -367,7 +332,7 @@
     dayPicker.style.display = 'block';
   }
 
-  // ── Itinerary add / remove ────────────────────────────────────
+  // ?? Itinerary add / remove ????????????????????????????????????
   function addToDay(dayIndex, attractionId) {
     if (itinerary[dayIndex].length >= MAX_PER_DAY) return;
     if (itinerary[dayIndex].includes(attractionId)) return;
@@ -375,7 +340,7 @@
     saveToLocalStorage();
     renderItineraryDays();
     updateSummary();
-    showToast(`已加入第 ${dayIndex + 1} 天行程 ✓`);
+    showToast(`撌脣??亦洵 ${dayIndex + 1} 憭抵?蝔??);
   }
 
   function removeFromDay(dayIndex, attractionId) {
@@ -385,13 +350,13 @@
     updateSummary();
   }
 
-  // ── Render itinerary days ────────────────────────────────────
+  // ?? Render itinerary days ????????????????????????????????????
   function renderItineraryDays() {
     itineraryDaysEl.innerHTML = '';
     for (let d = 0; d < numDays; d++) {
       const dayIds = itinerary[d] || [];
       const totalHrs = dayIds.reduce((sum, id) => {
-        const a = getItem(id);
+        const a = ATTRACTIONS.find(x => x.id === id);
         return sum + (a ? a.timeHours : 0);
       }, 0);
 
@@ -400,16 +365,16 @@
       card.dataset.day = d;
 
       const statsText = dayIds.length
-        ? `${dayIds.length} 個景點・約 ${totalHrs} 小時`
-        : '尚未加入景點';
+        ? `${dayIds.length} ?暺蝝?${totalHrs} 撠?`
+        : '撠??舫?';
 
       card.innerHTML = `
         <div class="day-header">
-          <div class="day-num">第 ${d + 1} 天</div>
+          <div class="day-num">蝚?${d + 1} 憭?/div>
           <div class="day-stats">${statsText}</div>
         </div>
         <div class="day-attractions" id="day-list-${d}">
-          ${dayIds.length === 0 ? `<div class="day-empty">點擊景點卡片的「加入行程」<br/>將景點加入此天行程</div>` : ''}
+          ${dayIds.length === 0 ? `<div class="day-empty">暺??舫??∠????亥?蝔?br/>撠暺??交迨憭抵?蝔?/div>` : ''}
         </div>
       `;
 
@@ -417,7 +382,7 @@
 
       const listEl = card.querySelector(`#day-list-${d}`);
       dayIds.forEach(id => {
-        const attr = getItem(id);
+        const attr = ATTRACTIONS.find(a => a.id === id);
         if (!attr) return;
         const item = document.createElement('div');
         item.className = 'day-item';
@@ -425,9 +390,9 @@
           <span class="day-item-emoji">${attr.emoji}</span>
           <div class="day-item-info">
             <div class="day-item-name">${attr.name}</div>
-            <div class="day-item-time">約 ${attr.timeHours} 小時</div>
+            <div class="day-item-time">蝝?${attr.timeHours} 撠?</div>
           </div>
-          <button class="day-item-remove" title="移除" aria-label="從第${d+1}天移除${attr.name}">✕</button>
+          <button class="day-item-remove" title="蝘駁" aria-label="敺洵${d+1}憭拍宏??{attr.name}">??/button>
         `;
         item.querySelector('.day-item-remove').addEventListener('click', () => removeFromDay(d, id));
         listEl.appendChild(item);
@@ -435,19 +400,19 @@
     }
   }
 
-  // ── Summary ──────────────────────────────────────────────────
+  // ?? Summary ??????????????????????????????????????????????????
   function updateSummary() {
     const allIds = itinerary.slice(0, numDays).flat();
     const unique = [...new Set(allIds)];
     const totalHrs = unique.reduce((sum, id) => {
-      const a = getItem(id);
+      const a = ATTRACTIONS.find(x => x.id === id);
       return sum + (a ? a.timeHours : 0);
     }, 0);
-    summaryTotal.textContent = `📍 共規劃 ${unique.length} 個景點`;
-    summaryTime.textContent  = `⏱️ 預計遊覽時間 ${totalHrs} 小時（不含交通）`;
+    summaryTotal.textContent = `?? ?梯???${unique.length} ?暺;
+    summaryTime.textContent  = `?梧? ???汗?? ${totalHrs} 撠?嚗??思漱??`;
   }
 
-  // ── Itinerary controls ───────────────────────────────────────
+  // ?? Itinerary controls ???????????????????????????????????????
   function bindItineraryControls() {
     daysMinus.addEventListener('click', () => {
       if (numDays > MIN_DAYS) { numDays--; daysCountEl.textContent = numDays; renderItineraryDays(); updateSummary(); }
@@ -456,12 +421,12 @@
       if (numDays < MAX_DAYS) { numDays++; daysCountEl.textContent = numDays; renderItineraryDays(); updateSummary(); }
     });
     clearItinBtn.addEventListener('click', () => {
-      if (confirm('確定要清除所有行程安排嗎？')) {
+      if (confirm('蝣箏?閬??斗???蝔???嚗?)) {
         initItinerary();
         saveToLocalStorage();
         renderItineraryDays();
         updateSummary();
-        showToast('行程已清除');
+        showToast('銵?撌脫???);
       }
     });
     exportItinBtn.addEventListener('click', showExportModal);
@@ -469,48 +434,43 @@
     exportModal.addEventListener('click', e => { if (e.target === exportModal) exportModal.style.display = 'none'; });
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(exportText.textContent)
-        .then(() => { showToast('已複製到剪貼簿 ✓'); exportModal.style.display = 'none'; })
-        .catch(() => showToast('複製失敗，請手動選取文字'));
+        .then(() => { showToast('撌脰?鋆賢?芾票蝪???); exportModal.style.display = 'none'; })
+        .catch(() => showToast('銴ˊ憭望?嚗????詨???'));
     });
   }
 
-  // ── Export modal ──────────────────────────────────────────────
+  // ?? Export modal ??????????????????????????????????????????????
   function showExportModal() {
-    let text = '🌺 我的沖繩旅遊行程\n' + '═'.repeat(30) + '\n\n';
+    let text = '? ??瘝鼎??銵?\n' + '??.repeat(30) + '\n\n';
     let hasContent = false;
     for (let d = 0; d < numDays; d++) {
       const dayIds = itinerary[d] || [];
-      text += `📅 第 ${d + 1} 天\n`;
+      text += `?? 蝚?${d + 1} 憭坼n`;
       if (dayIds.length === 0) {
-        text += '   （尚未安排景點）\n';
+        text += '   嚗??芸??暺?\n';
       } else {
         let dayHrs = 0;
         dayIds.forEach((id, i) => {
-          const a = getItem(id);
+          const a = ATTRACTIONS.find(x => x.id === id);
           if (a) {
-            if (a.isHotel) {
-              text += `   ${i + 1}. 🏨 住宿: ${a.name}\n`;
-              text += `      📍 ${a.regionLabel}  💰 ${a.ticket}\n`;
-            } else {
-              text += `   ${i + 1}. ${a.emoji} ${a.name}（${a.nameJp}）\n`;
-              text += `      📍 ${a.regionLabel}  🕐 約 ${a.timeHours} 小時  🎟️ ${a.ticket}\n`;
-              dayHrs += a.timeHours;
-            }
+            text += `   ${i + 1}. ${a.emoji} ${a.name}嚗?{a.nameJp}嚗n`;
+            text += `      ?? ${a.regionLabel}  ?? 蝝?${a.timeHours} 撠?  ??儭?${a.ticket}\n`;
+            dayHrs += a.timeHours;
             hasContent = true;
           }
         });
-        text += `   ⏱️ 當日合計約 ${dayHrs} 小時\n`;
+        text += `   ?梧? ?嗆??蝝?${dayHrs} 撠?\n`;
       }
       text += '\n';
     }
-    if (!hasContent) text += '（行程尚未安排任何景點）\n';
-    text += '─'.repeat(30) + '\n';
-    text += '由 沖繩旅遊攻略 生成 🌺\n';
+    if (!hasContent) text += '嚗?蝔??芸??遙雿暺?\n';
+    text += '?'.repeat(30) + '\n';
+    text += '??瘝鼎???餌 ?? ?\n';
     exportText.textContent = text;
     exportModal.style.display = 'flex';
   }
 
-  // ── Toast notification ────────────────────────────────────────
+  // ?? Toast notification ????????????????????????????????????????
   function showToast(msg) {
     let toast = document.getElementById('okinawa-toast');
     if (!toast) {
@@ -537,7 +497,7 @@
     }, 2400);
   }
 
-  // ── LocalStorage ──────────────────────────────────────────────
+  // ?? LocalStorage ??????????????????????????????????????????????
   function saveToLocalStorage() {
     try { localStorage.setItem('okinawa_itinerary', JSON.stringify(itinerary)); } catch (e) {}
   }
@@ -552,7 +512,7 @@
     } catch (e) {}
   }
 
-  // ── Intersection Observer (fade-in cards) ────────────────────
+  // ?? Intersection Observer (fade-in cards) ????????????????????
   function observeCards() {
     if (!('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver((entries) => {
@@ -575,29 +535,7 @@
     });
   }
 
-  // ── Hotel Region Tabs ────────────────────────────────────────
-  function initHotelTabs() {
-    const tabs   = document.querySelectorAll('.hotel-tab');
-    const panels = document.querySelectorAll('.hotel-panel');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-        tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-        panels.forEach(p => { p.style.display = 'none'; });
-        tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-        const panel = document.getElementById(`hpanel-${target}`);
-        if (panel) {
-          panel.style.display = 'block';
-          panel.style.animation = 'none';
-          void panel.offsetWidth;
-          panel.style.animation = 'fadeInUp .35s ease both';
-        }
-      });
-    });
-  }
-
-  // ── Start ────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', () => { init(); initHotelTabs(); });
+  // ?? Start ????????????????????????????????????????????????????
+  document.addEventListener('DOMContentLoaded', init);
 
 })();

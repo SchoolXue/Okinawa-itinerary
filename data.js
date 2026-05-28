@@ -154,7 +154,7 @@ const ATTRACTIONS = [
     category: '自然・地質',
     emoji: '🪨',
     rating: '4.4',
-    image: 'img/daisekirinzan.jpg',
+    image: 'img/hedo_cape.jpg',
     fallback: FALLBACK_IMGS.nature,
     color: '#78716c',
     timeHours: 1.5,
