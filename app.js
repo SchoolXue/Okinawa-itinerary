@@ -535,7 +535,29 @@
     });
   }
 
+  // ── Hotel Region Tabs ────────────────────────────────────────
+  function initHotelTabs() {
+    const tabs   = document.querySelectorAll('.hotel-tab');
+    const panels = document.querySelectorAll('.hotel-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        panels.forEach(p => { p.style.display = 'none'; });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const panel = document.getElementById(`hpanel-${target}`);
+        if (panel) {
+          panel.style.display = 'block';
+          panel.style.animation = 'none';
+          void panel.offsetWidth;
+          panel.style.animation = 'fadeInUp .35s ease both';
+        }
+      });
+    });
+  }
+
   // ── Start ────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', () => { init(); initHotelTabs(); });
 
 })();
