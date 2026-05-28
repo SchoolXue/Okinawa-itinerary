@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>沖繩旅遊攻略 | 探索琉球之美</title>
+  <meta name="description" content="沖繩互動旅遊攻略，包含30個精選景點、互動地圖和自由行程規劃功能。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🌺 琉球群島</div>
+      <h1 class="hero-title">沖繩旅遊攻略</h1>
+      <p class="hero-subtitle">探索日本最南端的熱帶天堂<br/>碧海、珊瑚礁、琉球文化的完美融合</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">30</span><span class="stat-label">精選景點</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">3</span><span class="stat-label">旅遊區域</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">美好回憶</span></div>
+      </div>
+      <a href="#attractions-section" class="hero-cta" id="hero-cta-btn">
+        <span>開始探索景點</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+    </div>
+    <div class="hero-scroll-indicator"><div class="scroll-dot"></div></div>
+  </header>
+
+  <!-- ===== FILTER BAR ===== -->
+  <nav class="filter-bar" id="filter-bar" role="navigation" aria-label="景點分類篩選">
+    <div class="filter-inner">
+      <span class="filter-label">📍 篩選區域</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all" id="filter-all">全部景點</button>
+        <button class="filter-btn" data-filter="north" id="filter-north">🏝️ 北部</button>
+        <button class="filter-btn" data-filter="central" id="filter-central">🌊 中部</button>
+        <button class="filter-btn" data-filter="south" id="filter-south">🏯 南部・那霸</button>
+      </div>
+      <div class="filter-count" id="filter-count">顯示 30 個景點</div>
+    </div>
+  </nav>
+
+  <!-- ===== MAP SECTION ===== -->
+  <section class="map-section" id="map-section">
+    <div class="map-container">
+
+      <!-- Map Panel -->
+      <div class="map-panel" id="map-panel">
+        <div class="map-header">
+          <h2 class="map-title">沖繩本島地圖</h2>
+          <p class="map-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            點擊標記跳至景點
+          </p>
+        </div>
+
+        <div class="svg-map-wrapper" id="svg-map-wrapper">
+          <svg id="okinawa-map" viewBox="0 0 320 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="沖繩本島互動地圖">
+            <defs>
+              <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.3"/>
+                <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0.1"/>
+              </linearGradient>
+              <linearGradient id="landGradN" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#4ade80"/><stop offset="100%" style="stop-color:#16a34a"/>
+              </linearGradient>
+              <linearGradient id="landGradC" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#34d399"/><stop offset="100%" style="stop-color:#059669"/>
+              </linearGradient>
+              <linearGradient id="landGradS" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#86efac"/><stop offset="100%" style="stop-color:#15803d"/>
+              </linearGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="shadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/></filter>
+              <pattern id="wavePattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M0 20 Q10 10 20 20 Q30 30 40 20" stroke="rgba(14,165,233,0.15)" stroke-width="1" fill="none"/>
+              </pattern>
+            </defs>
+
+            <rect width="320" height="780" fill="url(#wavePattern)"/>
+            <rect width="320" height="780" fill="url(#oceanGrad)"/>
+
+            <!-- Region labels -->
+            <text x="272" y="130" class="region-label" text-anchor="middle">北部</text>
+            <text x="272" y="300" class="region-label" text-anchor="middle">中部</text>
+            <text x="272" y="520" class="region-label" text-anchor="middle">南部</text>
+
+            <!-- Island shapes -->
+            <path class="island-land" data-region="north"
+              d="M145,30 L155,28 L168,32 L175,40 L178,52 L172,65 L168,78 L172,90 L175,105
+                 L170,118 L162,130 L158,145 L155,160 L150,175 L148,190 L145,205 L140,215
+                 L135,205 L132,190 L130,175 L128,160 L125,145 L122,130 L118,115 L115,100
+                 L112,85 L115,70 L120,55 L128,42 L138,33 Z"
+              fill="url(#landGradN)" stroke="#15803d" stroke-width="1.5"/>
+            <path class="island-land" data-region="central"
+              d="M140,215 L145,205 L150,215 L158,225 L168,235 L175,248 L178,262 L175,278
+                 L172,292 L168,308 L165,325 L162,340 L158,355 L155,368 L152,380
+                 L148,380 L145,368 L142,355 L140,340 L137,325 L135,310 L132,295
+                 L130,280 L128,265 L130,250 L135,238 L140,225 Z"
+              fill="url(#landGradC)" stroke="#15803d" stroke-width="1.5"/>
+            <path class="island-land" data-region="south"
+              d="M152,380 L155,368 L162,378 L170,390 L175,405 L178,422 L176,438 L172,452
+                 L168,465 L163,478 L158,490 L154,502 L152,514 L150,526 L148,536 L145,545
+                 L142,536 L140,524 L138,510 L136,496 L133,480 L130,465 L128,450 L126,435
+                 L125,420 L127,405 L132,392 L140,382 L148,378 Z"
+              fill="url(#landGradS)" stroke="#15803d" stroke-width="1.5"/>
+            <path class="island-land" data-region="south"
+              d="M145,545 L148,540 L155,548 L160,558 L162,570 L158,580 L152,585
+                 L146,582 L142,572 L141,560 L143,550 Z"
+              fill="url(#landGradS)" stroke="#15803d" stroke-width="1.5"/>
+
+            <!-- Small islands -->
+            <ellipse cx="80" cy="140" rx="20" ry="13" fill="#4ade80" stroke="#15803d" stroke-width="1" opacity="0.75"/>
+            <text x="80" y="144" class="small-island-label" text-anchor="middle">伊江島</text>
+            <ellipse cx="82" cy="300" rx="14" ry="9" fill="#4ade80" stroke="#15803d" stroke-width="1" opacity="0.7"/>
+            <text x="82" y="304" class="small-island-label" text-anchor="middle">渡嘉敷</text>
+            <ellipse cx="222" cy="200" rx="16" ry="10" fill="#4ade80" stroke="#15803d" stroke-width="1" opacity="0.8"/>
+            <text x="222" y="204" class="small-island-label" text-anchor="middle">古宇利島</text>
+            <ellipse cx="200" cy="340" rx="12" ry="8" fill="#4ade80" stroke="#15803d" stroke-width="1" opacity="0.7"/>
+            <text x="200" y="344" class="small-island-label" text-anchor="middle">伊計島</text>
+
+            <!-- Compass -->
+            <g transform="translate(38,42)">
+              <circle cx="0" cy="0" r="18" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+              <polygon points="0,-14 4,0 0,4 -4,0" fill="white" opacity="0.9"/>
+              <polygon points="0,14 4,0 0,-4 -4,0" fill="rgba(255,255,255,0.4)"/>
+              <polygon points="-14,0 0,-4 4,0 0,4" fill="rgba(255,255,255,0.4)"/>
+              <polygon points="14,0 0,-4 -4,0 0,4" fill="rgba(255,255,255,0.4)"/>
+              <text x="0" y="-18" class="compass-label" text-anchor="middle">N</text>
+            </g>
+            <g transform="translate(20,740)">
+              <line x1="0" y1="0" x2="60" y2="0" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+              <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+              <line x1="60" y1="-5" x2="60" y2="5" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+              <text x="30" y="-8" class="scale-label" text-anchor="middle">30 km</text>
+            </g>
+
+            <!-- ===== MAP MARKERS (17 key spots) ===== -->
+
+            <!-- NORTH -->
+            <g class="marker-group" id="map-hedo" data-id="hedo" data-region="north" transform="translate(150,34)" role="button" tabindex="0" aria-label="辺戸岬">
+              <circle class="mpulse" cx="0" cy="0" r="12" fill="rgba(14,165,233,0.25)"/>
+              <circle cx="0" cy="0" r="7" fill="#0ea5e9" filter="url(#shadow)"/>
+              <text x="0" y="3" class="mico-sm" text-anchor="middle">🌊</text>
+              <text x="0" y="19" class="mlabel" text-anchor="middle">辺戸岬</text>
+            </g>
+            <g class="marker-group" id="map-daisekirinzan" data-id="daisekirinzan" data-region="north" transform="translate(158,50)" role="button" tabindex="0" aria-label="大石林山">
+              <circle class="mpulse" cx="0" cy="0" r="10" fill="rgba(120,113,108,0.3)"/>
+              <circle cx="0" cy="0" r="6" fill="#78716c" filter="url(#shadow)"/>
+              <text x="0" y="3" class="mico-xs" text-anchor="middle">🪨</text>
+            </g>
+            <g class="marker-group" id="map-nakijin" data-id="nakijin" data-region="north" transform="translate(130,70)" role="button" tabindex="0" aria-label="今帰仁城跡">
+              <circle class="mpulse" cx="0" cy="0" r="14" fill="rgba(245,158,11,0.25)"/>
+              <circle cx="0" cy="0" r="9" fill="#f59e0b" filter="url(#shadow)"/>
+              <text x="0" y="4" class="mico-sm" text-anchor="middle">🏯</text>
+              <text x="0" y="22" class="mlabel" text-anchor="middle">今帰仁城</text>
+            </g>
+            <g class="marker-group" id="map-churaumi" data-id="churaumi" data-region="north" transform="translate(115,118)" role="button" tabindex="0" aria-label="美ら海水族館">
+              <circle class="mpulse" cx="0" cy="0" r="16" fill="rgba(59,130,246,0.25)"/>
+              <circle cx="0" cy="0" r="11" fill="#3b82f6" filter="url(#shadow)"/>
+              <text x="0" y="4" class="mico-sm" text-anchor="middle">🐋</text>
+              <text x="0" y="24" class="mlabel" text-anchor="middle">美ら海</text>
+            </g>
+            <g class="marker-group" id="map-fukugi" data-id="fukugi" data-region="north" transform="translate(111,128)" role="button" tabindex="0" aria-label="備瀬フクギ並木">
+              <circle cx="0" cy="0" r="5" fill="#16a34a" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🌳</text>
+            </g>
+            <g class="marker-group" id="map-ie_island" data-id="ie_island" data-region="north" transform="translate(80,140)" role="button" tabindex="0" aria-label="伊江島">
+              <circle cx="0" cy="0" r="6" fill="#06b6d4" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🏝️</text>
+            </g>
+            <g class="marker-group" id="map-kouri" data-id="kouri" data-region="north" transform="translate(222,200)" role="button" tabindex="0" aria-label="古宇利島">
+              <circle class="mpulse" cx="0" cy="0" r="13" fill="rgba(236,72,153,0.25)"/>
+              <circle cx="0" cy="0" r="8" fill="#ec4899" filter="url(#shadow)"/>
+              <text x="0" y="3" class="mico-sm" text-anchor="middle">💗</text>
+              <text x="0" y="22" class="mlabel" text-anchor="middle">古宇利島</text>
+            </g>
+
+            <!-- CENTRAL -->
+            <g class="marker-group" id="map-zanpa" data-id="zanpa" data-region="central" transform="translate(118,243)" role="button" tabindex="0" aria-label="残波岬">
+              <circle cx="0" cy="0" r="6" fill="#0369a1" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🗼</text>
+            </g>
+            <g class="marker-group" id="map-manzamo" data-id="manzamo" data-region="central" transform="translate(122,257)" role="button" tabindex="0" aria-label="万座毛">
+              <circle class="mpulse" cx="0" cy="0" r="14" fill="rgba(16,185,129,0.25)"/>
+              <circle cx="0" cy="0" r="9" fill="#10b981" filter="url(#shadow)"/>
+              <text x="0" y="4" class="mico-sm" text-anchor="middle">🐘</text>
+              <text x="0" y="22" class="mlabel" text-anchor="middle">万座毛</text>
+            </g>
+            <g class="marker-group" id="map-blue_cave" data-id="blue_cave" data-region="central" transform="translate(118,272)" role="button" tabindex="0" aria-label="青の洞窟">
+              <circle cx="0" cy="0" r="6" fill="#2563eb" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🤿</text>
+            </g>
+            <g class="marker-group" id="map-kaichu_road" data-id="kaichu_road" data-region="central" transform="translate(175,338)" role="button" tabindex="0" aria-label="海中道路">
+              <circle class="mpulse" cx="0" cy="0" r="12" fill="rgba(8,145,178,0.25)"/>
+              <circle cx="0" cy="0" r="7" fill="#0891b2" filter="url(#shadow)"/>
+              <text x="0" y="3" class="mico-sm" text-anchor="middle">🛣️</text>
+              <text x="0" y="20" class="mlabel" text-anchor="middle">海中道路</text>
+            </g>
+            <g class="marker-group" id="map-katsuren" data-id="katsuren" data-region="central" transform="translate(165,335)" role="button" tabindex="0" aria-label="勝連城跡">
+              <circle cx="0" cy="0" r="7" fill="#a855f7" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">⛩️</text>
+            </g>
+
+            <!-- SOUTH -->
+            <g class="marker-group" id="map-seifa" data-id="seifa" data-region="south" transform="translate(172,448)" role="button" tabindex="0" aria-label="斎場御嶽">
+              <circle cx="0" cy="0" r="6" fill="#14b8a6" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🌿</text>
+            </g>
+            <g class="marker-group" id="map-gyokusendo" data-id="gyokusendo" data-region="south" transform="translate(160,468)" role="button" tabindex="0" aria-label="玉泉洞">
+              <circle cx="0" cy="0" r="6" fill="#7c3aed" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🕳️</text>
+            </g>
+            <g class="marker-group" id="map-shuri" data-id="shuri" data-region="south" transform="translate(155,490)" role="button" tabindex="0" aria-label="首里城">
+              <circle class="mpulse" cx="0" cy="0" r="16" fill="rgba(239,68,68,0.25)"/>
+              <circle cx="0" cy="0" r="11" fill="#ef4444" filter="url(#shadow)"/>
+              <text x="0" y="4" class="mico-sm" text-anchor="middle">🏯</text>
+              <text x="0" y="24" class="mlabel" text-anchor="middle">首里城</text>
+            </g>
+            <g class="marker-group" id="map-senaga" data-id="senaga" data-region="south" transform="translate(136,510)" role="button" tabindex="0" aria-label="瀬長島">
+              <circle cx="0" cy="0" r="6" fill="#f43f5e" filter="url(#shadow)"/>
+              <text x="0" y="2" class="mico-xs" text-anchor="middle">🌅</text>
+            </g>
+            <g class="marker-group" id="map-peace_memorial" data-id="peace_memorial" data-region="south" transform="translate(153,568)" role="button" tabindex="0" aria-label="平和祈念公園">
+              <circle class="mpulse" cx="0" cy="0" r="12" fill="rgba(100,116,139,0.25)"/>
+              <circle cx="0" cy="0" r="7" fill="#64748b" filter="url(#shadow)"/>
+              <text x="0" y="3" class="mico-sm" text-anchor="middle">🕊️</text>
+              <text x="0" y="20" class="mlabel" text-anchor="middle">平和公園</text>
+            </g>
+
+          </svg>
+        </div>
+
+        <div class="map-legend">
+          <div class="legend-title">圖例</div>
+          <div class="legend-items">
+            <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div><span>北部</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div><span>中部</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#86efac"></div><span>南部</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div><span>★ 熱門景點</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Right: Region overview -->
+      <div class="map-overview" id="map-overview">
+        <div class="overview-title">🗺️ 沖繩三大旅遊區域</div>
+        <div class="overview-regions">
+          <div class="ov-region" data-filter="north" id="ov-north">
+            <div class="ov-top">
+              <span class="ov-icon">🏝️</span>
+              <div>
+                <div class="ov-name">北部</div>
+                <div class="ov-sub">Kunigami・Nakijin</div>
+              </div>
+              <div class="ov-count" id="ov-count-north">10</div>
+            </div>
+            <p class="ov-desc">原始自然景觀與琉球歷史古城的完美結合，美ら海水族館、今帰仁城跡等世界級景點匯聚於此。</p>
+            <div class="ov-highlights">
+              <span>🐋 美ら海水族館</span><span>🏯 今帰仁城跡</span><span>💗 古宇利島</span>
+            </div>
+          </div>
+          <div class="ov-region" data-filter="central" id="ov-central">
+            <div class="ov-top">
+              <span class="ov-icon">🌊</span>
+              <div>
+                <div class="ov-name">中部</div>
+                <div class="ov-sub">Nakagami・Uruma</div>
+              </div>
+              <div class="ov-count" id="ov-count-central">10</div>
+            </div>
+            <p class="ov-desc">度假飯店林立的恩納村海岸線，珊瑚礁潛水勝地青の洞窟，以及世界遺產城堡群皆在此區。</p>
+            <div class="ov-highlights">
+              <span>🐘 万座毛</span><span>🤿 青の洞窟</span><span>🛣️ 海中道路</span>
+            </div>
+          </div>
+          <div class="ov-region" data-filter="south" id="ov-south">
+            <div class="ov-top">
+              <span class="ov-icon">🏯</span>
+              <div>
+                <div class="ov-name">南部・那霸</div>
+                <div class="ov-sub">Naha・Shimajiri</div>
+              </div>
+              <div class="ov-count" id="ov-count-south">10</div>
+            </div>
+            <p class="ov-desc">首里城等琉球王朝遺跡與那霸市都市文化交融，還有充滿歷史意義的二戰紀念場所。</p>
+            <div class="ov-highlights">
+              <span>🏯 首里城</span><span>🛍️ 国際通り</span><span>🌿 斎場御嶽</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-tip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          點擊地圖標記或下方景點卡片，即可查看詳細資訊
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== ATTRACTIONS GRID ===== -->
+  <section class="attractions-section" id="attractions-section">
+    <div class="section-header">
+      <h2 class="section-title">精選景點一覽</h2>
+      <p class="section-subtitle">點擊景點卡片查看詳細介紹・或點選「加入行程」安排行程</p>
+    </div>
+    <div class="attractions-grid" id="attractions-grid">
+      <!-- JS generated -->
+    </div>
+  </section>
+
+  <!-- ===== DETAIL DRAWER (below grid) ===== -->
+  <section class="detail-section" id="detail-section" style="display:none;" aria-live="polite">
+    <div class="detail-section-inner">
+      <button class="detail-close-btn" id="detail-close-btn" aria-label="關閉景點詳情">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        收起詳情
+      </button>
+      <div class="detail-layout">
+        <!-- Left: Image -->
+        <div class="detail-image-col">
+          <div class="detail-image-wrap">
+            <img id="detail-image" src="" alt="" class="detail-image"/>
+            <div class="detail-region-badge" id="detail-region-badge"></div>
+            <div class="detail-rating" id="detail-rating"></div>
+          </div>
+          <div class="detail-info-grid">
+            <div class="info-card">
+              <div class="info-icon">🕐</div>
+              <div class="info-content">
+                <div class="info-label">建議遊覽時間</div>
+                <div class="info-value" id="info-time-val"></div>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon">🎟️</div>
+              <div class="info-content">
+                <div class="info-label">門票資訊</div>
+                <div class="info-value" id="info-ticket-val"></div>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon">⏰</div>
+              <div class="info-content">
+                <div class="info-label">開放時間</div>
+                <div class="info-value" id="info-hours-val"></div>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon">🚗</div>
+              <div class="info-content">
+                <div class="info-label">交通方式</div>
+                <div class="info-value" id="info-access-val"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right: Content -->
+        <div class="detail-content-col">
+          <div class="detail-category" id="detail-category"></div>
+          <h2 class="detail-name" id="detail-name"></h2>
+          <div class="detail-name-jp" id="detail-name-jp"></div>
+          <div class="detail-tags" id="detail-tags"></div>
+          <p class="detail-desc" id="detail-desc"></p>
+          <div class="detail-tips-box">
+            <div class="tips-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              旅遊小貼士
+            </div>
+            <ul class="tips-list" id="detail-tips-list"></ul>
+          </div>
+          <div class="detail-actions">
+            <button class="add-to-itinerary-btn" id="detail-add-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              加入行程
+            </button>
+            <div class="day-picker" id="day-picker" style="display:none;">
+              <div class="day-picker-title">選擇要加入第幾天</div>
+              <div class="day-picker-days" id="day-picker-days"></div>
+              <button class="day-picker-close" id="day-picker-close">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ITINERARY PLANNER ===== -->
+  <section class="itinerary-section" id="itinerary-section">
+    <div class="itinerary-container">
+      <div class="itinerary-header">
+        <div class="itinerary-header-text">
+          <h2 class="section-title" style="color:white">✈️ 自由行程規劃</h2>
+          <p class="section-subtitle" style="color:rgba(255,255,255,0.75)">點擊景點卡片的「加入行程」按鈕，將景點加入你的每日計劃</p>
+        </div>
+        <div class="itinerary-controls">
+          <div class="days-control">
+            <span class="days-label">行程天數</span>
+            <div class="days-stepper">
+              <button class="step-btn" id="days-minus" aria-label="減少天數">－</button>
+              <span class="days-num" id="days-count">3</span>
+              <button class="step-btn" id="days-plus" aria-label="增加天數">＋</button>
+            </div>
+          </div>
+          <div class="itinerary-action-btns">
+            <button class="itin-btn itin-btn-clear" id="clear-itinerary">🗑️ 清除全部</button>
+            <button class="itin-btn itin-btn-export" id="export-itinerary">📋 匯出行程</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="itinerary-days" id="itinerary-days">
+        <!-- JS generated day cards -->
+      </div>
+
+      <div class="itinerary-summary" id="itinerary-summary">
+        <div class="summary-stat" id="summary-total"></div>
+        <div class="summary-stat" id="summary-time"></div>
+      </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="export-modal-overlay" id="export-modal-overlay" style="display:none;">
+      <div class="export-modal" id="export-modal">
+        <div class="export-modal-header">
+          <h3>📋 我的沖繩行程</h3>
+          <button class="export-close" id="export-close">✕</button>
+        </div>
+        <pre class="export-text" id="export-text"></pre>
+        <button class="copy-btn" id="copy-btn">複製到剪貼簿</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRAVEL TIPS ===== -->
+  <section class="travel-tips-section" id="travel-tips">
+    <div class="tips-container">
+      <div class="tips-section-header">
+        <h2 class="section-title" style="color:white">沖繩旅遊實用資訊</h2>
+        <p class="section-subtitle" style="color:rgba(255,255,255,0.7)">出發前必讀的旅遊小知識</p>
+      </div>
+      <div class="tips-cards-grid">
+        <div class="tips-card"><div class="tips-card-icon">✈️</div><h3>最佳旅遊季節</h3><p>4-6月：梅雨前的春天，天氣舒適。7-9月：海灘旺季，陽光充沛，但需注意颱風。10-12月：氣候宜人，人潮較少的旅遊淡季。</p></div>
+        <div class="tips-card"><div class="tips-card-icon">🚗</div><h3>交通建議</h3><p>沖繩幅員廣大，強烈建議租車自駕。那霸市內可搭乘單軌電車（Yui Rail）。国際通一帶步行即可。租車建議提早預訂。</p></div>
+        <div class="tips-card"><div class="tips-card-icon">🍜</div><h3>必吃美食</h3><p>沖繩苦瓜炒豆腐（ゴーヤーチャンプルー）、沖繩拉麵（沖繩そば）、塔可飯（タコライス）、琉球冰淇淋和黑糖甜點。</p></div>
+        <div class="tips-card"><div class="tips-card-icon">🛍️</div><h3>購物伴手禮</h3><p>琉球玻璃工藝品、紅型（Bingata）染布、泡盛（沖繩清酒）、紫芋甜點、海鹽巧克力、守禮門紀念品。</p></div>
+        <div class="tips-card"><div class="tips-card-icon">💰</div><h3>旅遊預算參考</h3><p>住宿：¥8,000–¥30,000/晚<br/>餐費：¥1,000–¥3,000/餐<br/>景點門票：¥500–¥2,000不等<br/>租車：¥3,000–¥8,000/天</p></div>
+        <div class="tips-card"><div class="tips-card-icon">📱</div><h3>實用 App</h3><p>Google Maps（導航）、Google 翻譯（拍照翻譯）、Yahoo!天気（天氣預報）、食べログ（餐廳評價）、じゃらん（訂房）。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-logo">🌺 沖繩攻略</div>
+      <p class="footer-text">探索日本最南端的熱帶天堂 · 琉球文化 · 碧海珊瑚</p>
+      <p class="footer-copy">© 2026 沖繩旅遊攻略 · 資料僅供參考，請以官方最新資訊為準</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
