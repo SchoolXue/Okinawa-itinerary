@@ -566,6 +566,7 @@ body { font-family: var(--font-sans); color: var(--text-primary); background: #f
 .central-bg3 { background: linear-gradient(135deg, #f97316, #ea580c, #c2410c); }
 .central-bg4 { background: linear-gradient(135deg, #34d399, #10b981, #059669); }
 .central-bg5 { background: linear-gradient(135deg, #94a3b8, #64748b, #475569); }
+.central-bg-hyatt { background: linear-gradient(135deg, #1e3a5f, #1d4ed8, #0ea5e9); }
 
 .south-bg  { background: linear-gradient(135deg, #ef4444, #dc2626, #b91c1c); }
 .south-bg2 { background: linear-gradient(135deg, #f59e0b, #d97706, #b45309); }
