@@ -6,6 +6,9 @@
   'use strict';
 
   // ── State ──────────────────────────────────────────────────
+  let HOTELS = [];
+  const getItem = (id) => ATTRACTIONS.find(a => a.id === id) || HOTELS.find(h => h.id === id);
+
   let activeAttractionId = null;
   let activeFilter       = 'all';
   let numDays            = 3;
@@ -55,6 +58,7 @@
   function init() {
     initItinerary();
     buildAttractionCards();
+    initHotels();
     bindMapMarkers();
     bindFilterButtons();
     bindMapOverviewRegions();
@@ -64,6 +68,36 @@
     restoreFromLocalStorage();
     renderItineraryDays();
     updateSummary();
+  }
+
+  // ── Init Hotels ─────────────────────────────────────────────
+  function initHotels() {
+    document.querySelectorAll('.hotel-card').forEach(card => {
+      const h = {
+        id: card.dataset.hotelId,
+        name: card.dataset.hotelName,
+        nameJp: '',
+        emoji: card.dataset.hotelEmoji,
+        regionLabel: card.dataset.hotelRegion,
+        ticket: card.dataset.hotelPrice + ' / ' + card.dataset.hotelStars,
+        timeHours: 0, // Hotels do not add sightseeing time
+        isHotel: true
+      };
+      if(h.id) HOTELS.push(h);
+
+      // Create "Add to itinerary" button for hotel
+      const btn = document.createElement('button');
+      btn.className = 'card-btn-add hotel-add-btn';
+      btn.innerHTML = <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>加入行程;
+      
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDayPicker(h.id);
+      });
+
+      const row = card.querySelector('.hotel-info-row');
+      if (row) row.appendChild(btn);
+    });
   }
 
   // ── Itinerary init ──────────────────────────────────────────
@@ -135,7 +169,7 @@
 
   // ── Show detail (slides in BELOW the attractions grid) ──────
   function showDetail(id) {
-    const attr = ATTRACTIONS.find(a => a.id === id);
+    const attr = getItem(id);
     if (!attr) return;
 
     // Don't re-animate if same card clicked
@@ -252,7 +286,7 @@
         filterMapMarkers(activeFilter);
         // If active detail is not in this filter, close it
         if (activeAttractionId) {
-          const a = ATTRACTIONS.find(x => x.id === activeAttractionId);
+          const a = getItem(activeAttractionId);
           if (activeFilter !== 'all' && a?.region !== activeFilter) closeDetail();
         }
       });
@@ -356,7 +390,7 @@
     for (let d = 0; d < numDays; d++) {
       const dayIds = itinerary[d] || [];
       const totalHrs = dayIds.reduce((sum, id) => {
-        const a = ATTRACTIONS.find(x => x.id === id);
+        const a = getItem(id);
         return sum + (a ? a.timeHours : 0);
       }, 0);
 
@@ -382,7 +416,7 @@
 
       const listEl = card.querySelector(`#day-list-${d}`);
       dayIds.forEach(id => {
-        const attr = ATTRACTIONS.find(a => a.id === id);
+        const attr = getItem(id);
         if (!attr) return;
         const item = document.createElement('div');
         item.className = 'day-item';
@@ -405,7 +439,7 @@
     const allIds = itinerary.slice(0, numDays).flat();
     const unique = [...new Set(allIds)];
     const totalHrs = unique.reduce((sum, id) => {
-      const a = ATTRACTIONS.find(x => x.id === id);
+      const a = getItem(id);
       return sum + (a ? a.timeHours : 0);
     }, 0);
     summaryTotal.textContent = `📍 共規劃 ${unique.length} 個景點`;
@@ -451,11 +485,16 @@
       } else {
         let dayHrs = 0;
         dayIds.forEach((id, i) => {
-          const a = ATTRACTIONS.find(x => x.id === id);
+          const a = getItem(id);
           if (a) {
-            text += `   ${i + 1}. ${a.emoji} ${a.name}（${a.nameJp}）\n`;
-            text += `      📍 ${a.regionLabel}  🕐 約 ${a.timeHours} 小時  🎟️ ${a.ticket}\n`;
-            dayHrs += a.timeHours;
+            if (a.isHotel) {
+              text += `   ${i + 1}. 🏨 住宿: ${a.name}\n`;
+              text += `      📍 ${a.regionLabel}  💰 ${a.ticket}\n`;
+            } else {
+              text += `   ${i + 1}. ${a.emoji} ${a.name}（${a.nameJp}）\n`;
+              text += `      📍 ${a.regionLabel}  🕐 約 ${a.timeHours} 小時  🎟️ ${a.ticket}\n`;
+              dayHrs += a.timeHours;
+            }
             hasContent = true;
           }
         });

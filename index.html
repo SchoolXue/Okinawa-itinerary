@@ -44,6 +44,9 @@
         <button class="filter-btn" data-filter="central" id="filter-central">🌊 中部</button>
         <button class="filter-btn" data-filter="south" id="filter-south">🏯 南部・那霸</button>
       </div>
+      <div class="filter-bar-sep"></div>
+      <a href="#hotels-section" class="filter-nav-link" id="filter-hotels-link">🏨 住宿推薦</a>
+      <a href="#itinerary-section" class="filter-nav-link" id="filter-itin-link">✈️ 行程規劃</a>
       <div class="filter-count" id="filter-count">顯示 30 個景點</div>
     </div>
   </nav>
@@ -469,7 +472,7 @@
       <div class="hotel-panel active" id="hpanel-north" role="tabpanel">
         <div class="hotels-grid">
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="halekulani" data-hotel-name="ハレクラニ沖縄" data-hotel-emoji="🌺" data-hotel-region="北部・恩納村" data-hotel-price="¥65,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder north-bg"><span>🌺</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -493,7 +496,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="hilton_sesoko" data-hotel-name="ヒルトン沖縄瀬底リゾート" data-hotel-emoji="🐋" data-hotel-region="北部・本部町" data-hotel-price="¥38,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder north-bg2"><span>🐋</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -517,7 +520,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="orion_motobu" data-hotel-name="オリオンモトブリゾート&スパ" data-hotel-emoji="🌴" data-hotel-region="北部・本部町" data-hotel-price="¥18,000" data-hotel-stars="★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder north-bg3"><span>🌴</span></div>
               <div class="price-badge mid hotel-price-badge">¥¥ 中高價位</div>
@@ -541,7 +544,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="nago_beach" data-hotel-name="名護ビーチホテル" data-hotel-emoji="🏡" data-hotel-region="北部・名護市" data-hotel-price="¥8,000" data-hotel-stars="★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder north-bg4"><span>🏡</span></div>
               <div class="price-badge budget hotel-price-badge">¥ 經濟型</div>
@@ -565,7 +568,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="ana_manza" data-hotel-name="ANAインターコンチネンタル万座ビーチリゾート" data-hotel-emoji="⛩️" data-hotel-region="北部・今帰仁村" data-hotel-price="¥42,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder north-bg5"><span>⛩️</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -596,7 +599,7 @@
       <div class="hotel-panel" id="hpanel-central" role="tabpanel" style="display:none;">
         <div class="hotels-grid">
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="busena" data-hotel-name="ザ・ブセナテラス" data-hotel-emoji="🌊" data-hotel-region="中部・名護市" data-hotel-price="¥55,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg"><span>🌊</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -620,7 +623,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="renaissance" data-hotel-name="ルネッサンスリゾートオキナワ" data-hotel-emoji="🌺" data-hotel-region="中部・恩納村" data-hotel-price="¥40,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg2"><span>🌺</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -644,7 +647,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="zanpa_royal" data-hotel-name="沖縄残波岬ロイヤルホテル" data-hotel-emoji="🏰" data-hotel-region="中部・恩納村" data-hotel-price="¥22,000" data-hotel-stars="★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg3"><span>🏰</span></div>
               <div class="price-badge mid hotel-price-badge">¥¥ 中高價位</div>
@@ -668,7 +671,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="em_wellness" data-hotel-name="EMウェルネスリゾートコスタビスタ沖縄" data-hotel-emoji="🌿" data-hotel-region="中部・うるま市" data-hotel-price="¥18,000" data-hotel-stars="★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg4"><span>🌿</span></div>
               <div class="price-badge mid hotel-price-badge">¥¥ 中高價位</div>
@@ -692,7 +695,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="koza_gh" data-hotel-name="コザゲストハウス ミーカガン" data-hotel-emoji="🏙️" data-hotel-region="中部・沖縄市" data-hotel-price="¥4,000" data-hotel-stars="★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg5"><span>🏙️</span></div>
               <div class="price-badge budget hotel-price-badge">¥ 經濟型</div>
@@ -716,7 +719,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="hyatt_seragaki" data-hotel-name="ハイアット リージェンシー 瀬良垣アイランド 沖縄" data-hotel-emoji="🌊" data-hotel-region="中部・恩納村" data-hotel-price="¥58,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder central-bg-hyatt"><span>🌊</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -748,7 +751,7 @@
       <div class="hotel-panel" id="hpanel-south" role="tabpanel" style="display:none;">
         <div class="hotels-grid">
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="dt_hilton_shuri" data-hotel-name="ダブルツリーbyヒルトン那覇首里城" data-hotel-emoji="🏯" data-hotel-region="南部・那霸市" data-hotel-price="¥28,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder south-bg"><span>🏯</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -772,7 +775,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="senagajima" data-hotel-name="沖縄瀬長島ホテル" data-hotel-emoji="✈️" data-hotel-region="南部・豊見城市" data-hotel-price="¥32,000" data-hotel-stars="★★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder south-bg2"><span>✈️</span></div>
               <div class="price-badge luxury hotel-price-badge">¥¥¥ 豪華型</div>
@@ -796,7 +799,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="jal_city" data-hotel-name="ホテルJALシティ那覇" data-hotel-emoji="🛍️" data-hotel-region="南部・那霸市" data-hotel-price="¥16,000" data-hotel-stars="★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder south-bg3"><span>🛍️</span></div>
               <div class="price-badge mid hotel-price-badge">¥¥ 中高價位</div>
@@ -820,7 +823,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="oriental" data-hotel-name="オリエンタルホテル沖縄リゾート&スパ" data-hotel-emoji="🌿" data-hotel-region="南部・南城市" data-hotel-price="¥25,000" data-hotel-stars="★★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder south-bg4"><span>🌿</span></div>
               <div class="price-badge mid hotel-price-badge">¥¥ 中高價位</div>
@@ -844,7 +847,7 @@
             </div>
           </div>
 
-          <div class="hotel-card">
+          <div class="hotel-card" data-hotel-id="locoa" data-hotel-name="ホテルロコアナハ" data-hotel-emoji="🎒" data-hotel-region="南部・那霸市" data-hotel-price="¥9,000" data-hotel-stars="★★★">
             <div class="hotel-image-wrap">
               <div class="hotel-img-placeholder south-bg5"><span>🎒</span></div>
               <div class="price-badge budget hotel-price-badge">¥ 經濟型</div>
