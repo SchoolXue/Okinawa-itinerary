@@ -721,9 +721,12 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>我的沖繩旅遊行程</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans TC',sans-serif;color:#1e293b;background:#fff}
+#print-area{background:#fff}
 .ph{background:linear-gradient(135deg,#0c4a6e 0%,#0369a1 55%,#0284c7 100%);padding:36px 48px;color:#fff}
 .ph-logo{font-size:1rem;letter-spacing:.12em;opacity:.8;margin-bottom:8px}
 .ph-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.1;margin-bottom:6px}
@@ -748,12 +751,25 @@ body{font-family:'Noto Sans TC',sans-serif;color:#1e293b;background:#fff}
 .spot-desc{font-size:.75rem;color:#64748b;line-height:1.7;margin-top:7px;border-top:1px solid #f1f5f9;padding-top:7px}
 .empty-msg{padding:14px;text-align:center;color:#94a3b8;font-style:italic;font-size:.82rem;border:1.5px dashed #e2e8f0;border-radius:12px}
 .pf{border-top:1px solid #e2e8f0;padding:20px 48px;text-align:center;color:#94a3b8;font-size:.72rem}
-.fab{position:fixed;bottom:24px;right:24px;display:flex;gap:10px;z-index:99}
-.fab-close{background:#f1f5f9;color:#475569;border:none;padding:13px 20px;border-radius:9999px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
-.fab-print{background:#0369a1;color:#fff;border:none;padding:13px 26px;border-radius:9999px;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(3,105,161,.4);font-family:'Noto Sans TC',sans-serif}
+/* FAB toolbar */
+.fab{position:fixed;bottom:24px;right:24px;display:flex;gap:10px;z-index:99;flex-wrap:wrap;justify-content:flex-end}
+.fab button{border:none;padding:13px 22px;border-radius:9999px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:.2s}
+.fab-close{background:#f1f5f9;color:#475569}
+.fab-print{background:#0369a1;color:#fff;box-shadow:0 8px 24px rgba(3,105,161,.4)}
 .fab-print:hover{background:#0284c7}
-@media print{.fab{display:none!important}.pb{padding:20px 32px}.ph{padding:28px 32px}}
+.fab-save{background:#0c4a6e;color:#fff;box-shadow:0 8px 24px rgba(12,74,110,.45)}
+.fab-save:hover{background:#0369a1}
+.fab-save:disabled{background:#94a3b8;cursor:not-allowed;box-shadow:none}
+/* Progress overlay */
+#pdf-progress{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#pdf-progress.show{display:flex}
+.pdf-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+.pdf-label{color:#fff;font-family:'Noto Sans TC',sans-serif;font-weight:600;font-size:1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media print{.fab{display:none!important}#pdf-progress{display:none!important}.pb{padding:20px 32px}.ph{padding:28px 32px}}
 </style></head><body>
+<div id="pdf-progress"><div class="pdf-spinner"></div><div class="pdf-label">正在生成 PDF，請稍候…</div></div>
+<div id="print-area">
 <div class="ph">
   <div class="ph-logo">🌺 沖繩旅遊攻略</div>
   <div class="ph-title">我的沖繩旅遊行程</div>
@@ -766,10 +782,49 @@ body{font-family:'Noto Sans TC',sans-serif;color:#1e293b;background:#fff}
 </div>
 <div class="pb">${daysHtml}</div>
 <div class="pf">🌺 由 沖繩旅遊攻略 自動生成 · 資料僅供參考，請以官方最新資訊為準</div>
+</div>
 <div class="fab">
   <button class="fab-close" onclick="window.close()">✕ 關閉</button>
-  <button class="fab-print" onclick="window.print()">🖨️ 列印 / 儲存 PDF</button>
+  <button class="fab-print" onclick="window.print()">🖨️ 列印</button>
+  <button class="fab-save" id="btn-save-pdf">⬇️ 儲存 PDF</button>
 </div>
+<script>
+document.getElementById('btn-save-pdf').addEventListener('click', async function() {
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = '⏳ 生成中…';
+  const progress = document.getElementById('pdf-progress');
+  progress.classList.add('show');
+  try {
+    const { jsPDF } = window.jspdf;
+    const printArea = document.getElementById('print-area');
+    const A4_W = 794;   // px at 96dpi ~= 210mm
+    const scale = A4_W / printArea.scrollWidth;
+    const canvas = await html2canvas(printArea, {
+      scale: window.devicePixelRatio * 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      windowWidth: printArea.scrollWidth,
+      scrollX: 0,
+      scrollY: 0
+    });
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const mmW = 210;   // A4 width mm
+    const mmH = mmW * canvas.height / canvas.width;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [mmW, mmH] });
+    doc.addImage(imgData, 'JPEG', 0, 0, mmW, mmH);
+    const filename = '沖繩旅遊行程_${today}.pdf';
+    doc.save(filename);
+  } catch(e) {
+    alert('PDF 生成失敗：' + e.message);
+  } finally {
+    progress.classList.remove('show');
+    btn.disabled = false;
+    btn.textContent = '⬇️ 儲存 PDF';
+  }
+});
+<\/script>
 </body></html>`;
 
     const win = window.open('', '_blank', 'width=860,height=920,scrollbars=yes,resizable=yes');
@@ -779,6 +834,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:#1e293b;background:#fff}
   }
 
   // ── Toast notification ────────────────────────────────────────
+
   function showToast(msg) {
     let toast = document.getElementById('okinawa-toast');
     if (!toast) {
