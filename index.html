@@ -9,6 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0369a1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="沖繩攻略" />
 </head>
 <body>
 
@@ -20,7 +26,7 @@
       <h1 class="hero-title">沖繩旅遊攻略</h1>
       <p class="hero-subtitle">探索日本最南端的熱帶天堂<br/>碧海、珊瑚礁、琉球文化的完美融合</p>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-num">30</span><span class="stat-label">精選景點</span></div>
+        <div class="stat"><span class="stat-num">40</span><span class="stat-label">精選景點</span></div>
         <div class="stat-divider"></div>
         <div class="stat"><span class="stat-num">3</span><span class="stat-label">旅遊區域</span></div>
         <div class="stat-divider"></div>
@@ -47,7 +53,11 @@
       <div class="filter-bar-sep"></div>
       <a href="#hotels-section" class="filter-nav-link" id="filter-hotels-link">🏨 住宿推薦</a>
       <a href="#itinerary-section" class="filter-nav-link" id="filter-itin-link">✈️ 行程規劃</a>
-      <div class="filter-count" id="filter-count">顯示 30 個景點</div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="attraction-search" placeholder="搜尋景點、類型、地區…" autocomplete="off" />
+      </div>
+      <div class="filter-count" id="filter-count">顯示 40 個景點</div>
     </div>
   </nav>
 
@@ -264,7 +274,7 @@
                 <div class="ov-name">北部</div>
                 <div class="ov-sub">Kunigami・Nakijin</div>
               </div>
-              <div class="ov-count" id="ov-count-north">10</div>
+              <div class="ov-count" id="ov-count-north">13</div>
             </div>
             <p class="ov-desc">原始自然景觀與琉球歷史古城的完美結合，美ら海水族館、今帰仁城跡等世界級景點匯聚於此。</p>
             <div class="ov-highlights">
@@ -278,7 +288,7 @@
                 <div class="ov-name">中部</div>
                 <div class="ov-sub">Nakagami・Uruma</div>
               </div>
-              <div class="ov-count" id="ov-count-central">10</div>
+              <div class="ov-count" id="ov-count-central">13</div>
             </div>
             <p class="ov-desc">度假飯店林立的恩納村海岸線，珊瑚礁潛水勝地青の洞窟，以及世界遺產城堡群皆在此區。</p>
             <div class="ov-highlights">
@@ -292,7 +302,7 @@
                 <div class="ov-name">南部・那霸</div>
                 <div class="ov-sub">Naha・Shimajiri</div>
               </div>
-              <div class="ov-count" id="ov-count-south">10</div>
+              <div class="ov-count" id="ov-count-south">14</div>
             </div>
             <p class="ov-desc">首里城等琉球王朝遺跡與那霸市都市文化交融，還有充滿歷史意義的二戰紀念場所。</p>
             <div class="ov-highlights">
@@ -385,16 +395,22 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               加入行程
             </button>
-            <div class="day-picker" id="day-picker" style="display:none;">
-              <div class="day-picker-title">選擇要加入第幾天</div>
-              <div class="day-picker-days" id="day-picker-days"></div>
-              <button class="day-picker-close" id="day-picker-close">取消</button>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- ===== GLOBAL DAY PICKER MODAL ===== -->
+  <div class="day-picker-overlay" id="day-picker-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="選擇加入天數">
+    <div class="day-picker" id="day-picker">
+      <div class="day-picker-header">
+        <div class="day-picker-title">🗓️ 選擇要加入第幾天</div>
+        <button class="day-picker-close" id="day-picker-close" aria-label="關閉">×</button>
+      </div>
+      <div class="day-picker-days" id="day-picker-days"></div>
+    </div>
+  </div>
 
   <!-- ===== ITINERARY PLANNER ===== -->
   <section class="itinerary-section" id="itinerary-section">
@@ -402,20 +418,27 @@
       <div class="itinerary-header">
         <div class="itinerary-header-text">
           <h2 class="section-title" style="color:white">✈️ 自由行程規劃</h2>
-          <p class="section-subtitle" style="color:rgba(255,255,255,0.75)">點擊景點卡片的「加入行程」按鈕，將景點加入你的每日計劃</p>
+          <p class="section-subtitle" style="color:rgba(255,255,255,0.75)">點擊景點卡片的「加入行程」按鈕，將景點加入你的每日計劃；可拖擺項目更改順序。</p>
+          <div class="date-picker-row">
+            <label for="start-date">📅 出發日期</label>
+            <input type="date" id="start-date" />
+            <span class="date-hint">（選填，設定後顯示每天實際日期）</span>
+          </div>
         </div>
         <div class="itinerary-controls">
           <div class="days-control">
             <span class="days-label">行程天數</span>
             <div class="days-stepper">
               <button class="step-btn" id="days-minus" aria-label="減少天數">－</button>
-              <span class="days-num" id="days-count">3</span>
+              <span class="days-num" id="days-count">5</span>
               <button class="step-btn" id="days-plus" aria-label="增加天數">＋</button>
             </div>
           </div>
           <div class="itinerary-action-btns">
             <button class="itin-btn itin-btn-clear" id="clear-itinerary">🗑️ 清除全部</button>
-            <button class="itin-btn itin-btn-export" id="export-itinerary">📋 匯出行程</button>
+            <button class="itin-btn itin-btn-export" id="export-itinerary">📋 匯出文字</button>
+            <button class="itin-btn itin-btn-pdf" id="pdf-itinerary">🖨️ 匯出PDF</button>
+            <button class="itin-btn itin-btn-share" id="share-itinerary">🔗 分享行程</button>
           </div>
         </div>
       </div>
@@ -906,5 +929,12 @@
 
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () =>
+        navigator.serviceWorker.register('./sw.js').catch(() => {})
+      );
+    }
+  </script>
 </body>
 </html>
